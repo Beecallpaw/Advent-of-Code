@@ -6,8 +6,6 @@ main = do
     print (sumOfTwo input)
     print (sumOfThree input)
 
+sumOfTwo xs = head  [a * b | a <- xs, b <- xs, a + b == 2020]
 
-sumOfTwo xs = head $ map(\(a,b) -> a*b) $ filter (\(a,b) -> (a+b == 2020)) [(a,b) | a <- xs, b <- xs]
-
-
-sumOfThree xs = head $ map(\(a,b,c) -> a*b*c) $ filter (\(a,b,c) -> (a+b+c == 2020)) [ (a,b,c) | c <- xs, b <- xs, a <- xs ]
+sumOfThree xs = head [ a * b * c | c <- xs, b <- xs, a <- xs, a + b + c == 2020 ]
