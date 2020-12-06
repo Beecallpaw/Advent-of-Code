@@ -40,11 +40,24 @@ highestSeatsList = data.map(highestSeats);
 console.log(Math.max(...highestSeatsList));
 
 // Part 2 Solution
+// console.time("hello");
+// let x = highestSeatsList.sort((a, b) => a - b);
+// last = x.pop();
+// for (i = x[0]; i < last; i++) {
+//   if (!x.includes(i)) {
+//     console.log(i);
+//     break;
+//   }
+// }
+
+// Part 2 Solution Optimized
 let x = highestSeatsList.sort((a, b) => a - b);
-last = x.pop();
-for (i = x[0]; i < last; i++) {
-  if (!x.includes(i)) {
-    console.log(i);
-    break;
+let found = true;
+let index = 0;
+while (found) {
+  if (x[index] + 1 != x[index + 1]) {
+    console.log(x[index] + 1);
+    found = false;
   }
+  index += 2;
 }
