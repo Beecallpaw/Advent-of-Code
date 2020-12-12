@@ -16,19 +16,93 @@ const adjacents = (data, i, j) => {
   ];
 };
 
-const calculateAdjacent = (data, val, i, j) => {
-  adjs = adjacents(data, i, j);
+const getAdjacentValue = (data, i, j, type) => {
+  switch (type) {
+    case "L":
+      if (data[i]) {
+        val = data[i][j - 1];
+        if (val == ".") return getAdjacentValue(data, i, j - 1, "L");
+        else return val;
+      }
+      return;
+    case "R":
+      if (data[i]) {
+        val = data[i][j + 1];
+        if (val == ".") return getAdjacentValue(data, i, j + 1, "R");
+        else return val;
+      }
+      return;
+    case "U":
+      if (data[i + 1]) {
+        val = data[i + 1][j];
+        if (val == ".") return getAdjacentValue(data, i + 1, j, "U");
+        else return val;
+      }
+      return;
+    case "D":
+      if (data[i - 1]) {
+        val = data[i - 1][j];
+        if (val == ".") return getAdjacentValue(data, i - 1, j, "D");
+        else return val;
+      }
+      return;
+    case "LU":
+      if (data[i - 1]) {
+        val = data[i - 1][j + 1];
+        if (val == ".") return getAdjacentValue(data, i - 1, j + 1, "LU");
+        else return val;
+      }
+      return;
+    case "RU":
+      if (data[i + 1]) {
+        val = data[i + 1][j + 1];
+        if (val == ".") return getAdjacentValue(data, i + 1, j + 1, "RU");
+        else return val;
+      }
+      return;
+    case "LD":
+      if (data[i - 1]) {
+        val = data[i - 1][j - 1];
+        if (val == ".") return getAdjacentValue(data, i - 1, j - 1, "LD");
+        else return val;
+      }
+      return;
+    case "RD":
+      if (data[i + 1]) {
+        val = data[i + 1][j - 1];
+        if (val == ".") return getAdjacentValue(data, i + 1, j - 1, "RD");
+        else return val;
+      }
+      return;
+  }
+};
+
+const adjacents2 = (data, i, j) => {
+  return [
+    getAdjacentValue(data, i, j, "L"),
+    getAdjacentValue(data, i, j, "R"),
+    getAdjacentValue(data, i, j, "U"),
+    getAdjacentValue(data, i, j, "D"),
+    getAdjacentValue(data, i, j, "LD"),
+    getAdjacentValue(data, i, j, "LU"),
+    getAdjacentValue(data, i, j, "RU"),
+    getAdjacentValue(data, i, j, "RD"),
+  ];
+};
+
+const calculateAdjacent = (adjCalculator, data, val, i, j, num) => {
+  adjs = adjCalculator(data, i, j);
   if (val == "L") {
     if (adjs.indexOf("#") == -1) return "#";
     return "L";
   }
   if (val == "#") {
-    if (adjs.filter((val) => val == "#").length >= 4) return "L";
+    if (adjs.filter((val) => val == "#").length >= num) return "L";
     return "#";
   }
 };
 
-const occupySeats = (data) => {
+const occupySeats = (data, adjCalculator, num) => {
   arr = [];
   rowLen = data[0].length;
   colLen = data.length;
@@ -37,23 +111,26 @@ const occupySeats = (data) => {
     for (j = 0; j < rowLen; j++) {
       val = data[i][j];
       if (val == ".") str += ".";
-      else str += calculateAdjacent(data, val, i, j);
+      else str += calculateAdjacent(adjCalculator, data, val, i, j, num);
     }
     arr.push(str);
   }
   return arr;
 };
 
-const recurse = (data) => {
-  first = occupySeats(data);
-  second = occupySeats(first);
+const recurse = (data, fn = adjacents, num = 4) => {
+  first = occupySeats(data, fn, num);
+  second = occupySeats(first, fn, num);
   val = true;
   while (val) {
     if (first.join("") == second.join("")) val = false;
-    else recurse(second);
+    else recurse(second, fn, num);
   }
   return first.join("").match(/#/g).length;
 };
 
 //Part 1 Solution
 console.log(recurse(data));
+
+// Part 2 Solution
+console.log(recurse(data, adjacents2, 5));
