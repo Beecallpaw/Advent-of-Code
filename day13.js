@@ -31,4 +31,35 @@ const answer = (obj) => {
     return id * newObj[id];
   }
 };
+
+// Part 1 Solution
 console.log(answer(obj));
+
+// Part 2 Solution
+const part2 = (str) => {
+  arr = str.split(",");
+  narr = [];
+
+  arr.forEach((val, key) => {
+    if (val != "x") {
+      key = (val - (key % val)) % val;
+      narr.push([key, +val]);
+    }
+  });
+  return narr.sort(([_, v1], [__, v2]) => v2 - v1);
+};
+
+const solution2 = (arr) => {
+  let timestamp = 0;
+  let inc = 1;
+
+  for (let i = 0; i < arr.length; i++) {
+    while (timestamp % arr[i][1] !== arr[i][0]) {
+      timestamp += inc;
+    }
+    inc *= arr[i][1];
+  }
+  return timestamp;
+};
+
+console.log(solution2(part2(data[1])));
