@@ -38,4 +38,60 @@ const subExpr = (expr) => {
 };
 
 // Part 1 Solution
-console.log(expressions.map(subExpr).reduce((x, y) => x + y));
+// console.log(expressions.map(subExpr).reduce((x, y) => x + y));
+
+const addFirst = (data) => {
+  let arr = [data[0]];
+  let addPlease;
+  for (let i = 1; i < data.length; i++) {
+    switch (data[i]) {
+      case "*":
+        addPlease = false;
+        arr.push(data[i]);
+        break;
+      case "+":
+        addPlease = true;
+        arr.push(data[i]);
+        break;
+      default:
+        if (addPlease) {
+          addPlease = false;
+          arr.push(data[i]);
+          let [start, end] = [
+            arr.lastIndexOf("+") - 1,
+            arr.lastIndexOf("+") + 1,
+          ];
+          val = Number(arr[start]) + Number(arr[end]);
+          arr.splice(start, end - start + 1, val);
+        } else {
+          addPlease = false;
+          arr.push(data[i]);
+        }
+        break;
+    }
+  }
+  return eval(arr.join(""));
+};
+
+const subExpr2 = (expr) => {
+  arr = [];
+  j = 0;
+  while (true) {
+    if (expr.indexOf("(") == -1) {
+      return addFirst(expr);
+    } else {
+      if (expr[j] == "(") arr.push("(");
+      else if (expr[j] == ")") {
+        arr.push(")");
+        [start, end] = [arr.lastIndexOf("("), arr.indexOf(")")];
+        value = addFirst(arr.slice(start + 1, end));
+        expr.splice(start, Number(end) - Number(start) + 1, value);
+        return subExpr2(expr);
+      } else arr.push(expr[j]);
+    }
+    j++;
+  }
+};
+
+// Part 2 solution
+console.log(expressions.map(subExpr2).reduce((x, y) => x + y));
