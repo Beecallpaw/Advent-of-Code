@@ -25,9 +25,7 @@ const createRegexp = (key) => {
 
 // Part 1 answer
 console.log(
-  msgs
-    .map((msg) => new RegExp(`^${createRegexp(0)}$`).test(msg))
-    .filter(Boolean).length
+  msgs.filter((msg) => new RegExp(`^${createRegexp(0)}$`).test(msg)).length
 );
 
 const createRegexp2 = (key) => {
@@ -38,8 +36,8 @@ const createRegexp2 = (key) => {
     let r42 = createRegexp2(42);
     let r31 = createRegexp2(31);
     let regex = [];
-    // random number 10
-    for (let i = 1; i <= 10; i++) {
+    // i maximum 4 (manually increase from 2 until we get same answer)
+    for (let i = 1; i <= 4; i++) {
       regex.push(`(${r42}{${i}}${r31}{${i}})`);
     }
     return `(${regex.join("|")})`;
@@ -54,7 +52,5 @@ const createRegexp2 = (key) => {
 
 // Part 2 answer
 console.log(
-  msgs
-    .map((msg) => new RegExp(`^${createRegexp2(0)}$`).test(msg))
-    .filter(Boolean).length
+  msgs.filter((msg) => new RegExp(`^${createRegexp2(0)}$`).test(msg)).length
 );
