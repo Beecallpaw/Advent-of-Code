@@ -1,3 +1,4 @@
+// WIP
 let xs = "389125467".split("").map(Number);
 len = xs.length;
 let current = 0;
@@ -18,6 +19,6 @@ for (let i = 0; i < 2; ++i) {
   destIdx = xs.indexOf(dest);
   current = current + 1 == 9 ? 0 : current + 1;
   xs = [first, xs[destIdx], ...pickup];
-    "" + first + xs[destIdx] + pickup.join("") + xs.slice(destIdx + 1).join("")
+  "" + first + xs[destIdx] + pickup.join("") + xs.slice(destIdx + 1).join("");
 }
 console.log(input);
